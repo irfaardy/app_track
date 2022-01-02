@@ -20,7 +20,7 @@ class TrackingController extends Controller
       DB::beginTransaction();
 
       try {
-            Tracker::where(['app_id'=>$request->app_id,'domain'=>$request->domain])->update(['last_online' => $request->last_online,]);
+            Tracker::where(['app_id'=>$request->app_id,'domain'=>$request->domain])->update(['last_online' => $request->last_online,'sender_ip' => $request->ip()]);
           DB::commit();
           return Json::response(200,'tx',[],"TRX-UPDATED");
       } catch (\Exception $e) {
@@ -83,7 +83,8 @@ class TrackingController extends Controller
                 'operating_system' => $request->operating_system,
                 'software_server' => $request->software_server,
                 'last_online' => $request->last_online,
-                'detected_at' => $request->detected_at
+                'detected_at' => $request->detected_at,
+                'sender_ip' => $request->ip()
                         ];
       return $params;
   }
