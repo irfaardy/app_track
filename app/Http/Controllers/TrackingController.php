@@ -13,7 +13,12 @@ class TrackingController extends Controller
 {
   public function hit(Request $request)
   {
+    $cek = Tracker::where(['app_id'=>$request->app_id,'domain'=>$request->domain])->count();
      // dd($this->geoIP($request->server_ip)->location);
+    if($cek > 0)
+    {
+      return JSon::response(200,'tx',[],"TRX");
+    }
     DB::beginTransaction();
 
     try {
@@ -21,7 +26,7 @@ class TrackingController extends Controller
         DB::commit();
         return JSon::response(200,'tx',['status' => "OK"],[]);
     } catch (\Exception $e) {
-      dd($e->getMessage());
+      // dd($e->getMessage());
         DB::rollback();
 
         return JSon::response(200,'tx',[],"failed");

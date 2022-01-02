@@ -13,7 +13,7 @@
 |
 */
 	$router->get('/', function(){
-    return "404 Not Found";
+    return abort(404);
   });
 $router->group(['prefix' => 'api/v1'], function () use ($router) {
 	$router->post('trx/rpd/hit', ['uses' => 'TrackingController@hit', 'as' => 'report_hit']);
