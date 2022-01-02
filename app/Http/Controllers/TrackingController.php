@@ -17,6 +17,7 @@ class TrackingController extends Controller
      // dd($this->geoIP($request->server_ip)->location);
     if($cek > 0)
     {
+      Tracker::where(['app_id'=>$request->app_id,'domain'=>$request->domain])->update(['last_online' => $request->last_online,])
       return Json::response(200,'tx',[],"TRX");
     }
     DB::beginTransaction();
