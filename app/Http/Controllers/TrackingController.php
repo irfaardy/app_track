@@ -26,7 +26,7 @@ class TrackingController extends Controller
         DB::commit();
         return Json::response(200,'tx',['status' => "OK"],[]);
     } catch (\Exception $e) {
-      // dd($e->getMessage());
+      dd($e->getMessage());
         DB::rollback();
 
         return Json::response(200,'tx',[],"failed");
