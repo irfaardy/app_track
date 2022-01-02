@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Tracker;
-use App\Helpers\JSon;
+use App\Helpers\Json;
 use Illuminate\Support\Facades\DB;
 use GeoIp2\Database\Reader;
 
@@ -17,19 +17,19 @@ class TrackingController extends Controller
      // dd($this->geoIP($request->server_ip)->location);
     if($cek > 0)
     {
-      return JSon::response(200,'tx',[],"TRX");
+      return Json::response(200,'tx',[],"TRX");
     }
     DB::beginTransaction();
 
     try {
         Tracker::create($this->params($request));
         DB::commit();
-        return JSon::response(200,'tx',['status' => "OK"],[]);
+        return Json::response(200,'tx',['status' => "OK"],[]);
     } catch (\Exception $e) {
       // dd($e->getMessage());
         DB::rollback();
 
-        return JSon::response(200,'tx',[],"failed");
+        return Json::response(200,'tx',[],"failed");
     }
 
   }
