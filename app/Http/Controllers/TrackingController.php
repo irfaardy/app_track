@@ -17,8 +17,20 @@ class TrackingController extends Controller
      // dd($this->geoIP($request->server_ip)->location);
     if($cek > 0)
     {
-      Tracker::where(['app_id'=>$request->app_id,'domain'=>$request->domain])->update(['last_online' => $request->last_online,]);
-      return Json::response(200,'tx',[],"TRX");
+      DB::beginTransaction();
+
+      try {
+            Tracker::where(['app_id'=>$request->app_id,'domain'=>$request->domain])->update(['last_online' => $request->last_online,]);
+          DB::commit();
+          return Json::response(200,'tx',[],"TRX-UPDATED");
+      } catch (\Exception $e) {
+
+          DB::rollback();
+
+          return Json::response(200,'tx',[],"Update-failed");
+      }
+
+
     }
     DB::beginTransaction();
 
@@ -27,7 +39,7 @@ class TrackingController extends Controller
         DB::commit();
         return Json::response(200,'tx',['status' => "OK"],[]);
     } catch (\Exception $e) {
-      dd($e->getMessage());
+
         DB::rollback();
 
         return Json::response(200,'tx',[],"failed");
