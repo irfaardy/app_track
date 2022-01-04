@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Tracker;
+use App\Models\AccessKey;
 use App\Helpers\Json;
 use Illuminate\Support\Facades\DB;
 use GeoIp2\Database\Reader;
+use Yajra\DataTables\Facades\DataTables;
 
 class TrackingController extends Controller
 {
@@ -45,6 +47,36 @@ class TrackingController extends Controller
         return Json::response(200,'tx',[],"failed");
     }
 
+  }
+  public function getData(Request $request)
+  {
+    if(!$this->authenticate($request->api_key))
+    {
+      return Json::response(401,'tx',[],"Unauthorized"); 
+    }
+    DB::beginTransaction();
+
+    try {
+        $track = Tracker::orderBy('last_online','DESC')->get();
+        DB::commit();
+        return DataTables::of($track)
+            ->rawColumns(['aksi','status','progress_task'])
+            ->make(true);
+    } catch (\Exception $e) {
+        echo $e->getMessage();
+        DB::rollback();
+
+        return Json::response(400,'tx',[],"Internal Server Error");
+    }
+  }
+  private function authenticate($token)
+  {
+      $cek = AccessKey::where('api_Key', $token)->count();
+      if($cek == 1)
+      {
+        return true;
+      }
+      return false;
   }
   private function geoIP($ip)
   {

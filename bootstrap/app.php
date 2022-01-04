@@ -24,7 +24,9 @@ $app = new Laravel\Lumen\Application(
 );
 
 $app->withFacades();
-
+class_alias('Yajra\DataTables\DataTables', 'Datatables');
+$app->configure('datatables');
+$app->register('Yajra\DataTables\DataTablesServiceProvider');
 $app->withEloquent();
 
 /*

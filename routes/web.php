@@ -17,4 +17,5 @@
   });
 $router->group(['prefix' => 'api/v1'], function () use ($router) {
 	$router->post('trx/rpd/hit', ['uses' => 'TrackingController@hit', 'as' => 'report_hit']);
+	$router->post('trx/getData', ['uses' => 'TrackingController@getData', 'as' => 'getData']);
 });
