@@ -50,9 +50,17 @@ class TrackingController extends Controller
   }
   public function getData(Request $request)
   {
+    if(!empty($_SERVER['HTTP_ORIGIN']))
+        {
+        header("Access-Control-Allow-Origin: ".$_SERVER['HTTP_ORIGIN']);
+
+        }
+        header('Access-Control-Allow-Credentials: true');
+        header('Access-Control-Max-Age: 86400');
+        header('Content-Type: application/json');
     if(!$this->authenticate($request->api_key))
     {
-      return Json::response(401,'tx',[],"Unauthorized"); 
+      return Json::response(401,'tx',[],"Unauthorized");
     }
     DB::beginTransaction();
 
