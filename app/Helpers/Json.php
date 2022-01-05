@@ -13,13 +13,17 @@ class Json
             'status'    => $status,
             $key_data   => $data,
             'errors'    => $errors
-        ],$status);
+        ],$status)
+				->header('Access-Control-Allow-Origin', '*')
+	 		  ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     }
 
     public static function validateError($status, $key_data = 'data', $data=null)
     {
         return response()->json([
             $key_data   => $data,
-        ],$status);
+        ],$status)
+			 ->header('Access-Control-Allow-Origin', '*')
+	 		 ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     }
 }
